@@ -13,7 +13,7 @@ A real-time web application built using the MERN stack (MongoDB, Express, React,
 - **Dark/Light Mode**: Toggle between themes for better user experience.
 
 ## Technologies Used
-- **Frontend**: React, Redux (State Management), ShadCN (UI Components)
+- **Frontend**: React, ShadCN (UI Components)
 - **Backend**: Node.js, Express
 - **Database**: MongoDB (NoSQL Database)
 - **Authentication**: Clerk integration (or JWT if applicable)
