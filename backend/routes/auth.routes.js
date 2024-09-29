@@ -1,10 +1,6 @@
 import express from "express";
-import {createClerkClient} from "@clerk/clerk-sdk-node"
-
+import { signin, signup } from "../controllers/auth.controller.js";
 const router = express.Router();
-
-
-router.get("/signup", (req,res)=>{
-    res.send("signup")
-})
+router.post("/signup", signup);
+router.post("/signin", signin);
 export default router;
