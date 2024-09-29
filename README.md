@@ -23,7 +23,7 @@ A real-time web application built using the MERN stack (MongoDB, Express, React,
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/WebOfAyush/Chat-app/chat-app.git
+   git clone https://github.com/WebOfAyush/Chat-app.git
    cd chat-app
    ```
 
