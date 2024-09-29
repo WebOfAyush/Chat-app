@@ -62,5 +62,3 @@ A real-time web application built using the MERN stack (MongoDB, Express, React,
 This project is licensed under the MIT License.
 
 ---
-
-You can now copy and paste this into your README file!
