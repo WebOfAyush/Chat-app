@@ -1,7 +1,6 @@
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import generateTokenAndSetCookie from "../utils/generateTokenAndSetCookie.js";
-import mongoose from "mongoose";
 export const signup = async (req, res) => {
   try {
     const { fullName, username, email, password } = req.body;
@@ -74,4 +73,20 @@ export const signin = async (req, res) => {
       .json({ success: false, message: "SignIn failed", error: error.message });
   }
 };
+export const signout = async(req,res) =>{
+  try {
+    res.cookie('jwt', "", {
+      maxAge : 0
+    })
+    res.status(200).json({
+      message: "logout successful"
+    })
+  } catch (error) {
+    console.error(`Error in signout controller: ${error}`);
+
+    return res
+      .status(500)
+      .json({ success: false, message: "Signout failed", error: error.message });
+  }
+}
 
