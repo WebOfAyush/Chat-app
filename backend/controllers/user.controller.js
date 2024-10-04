@@ -1,6 +1,6 @@
 import User from "../models/user.model";
 import bcrypt from "bcryptjs"
-import cloudinary from "cloudinary"
+import {v2 as cloudinary} from "cloudinary"
 
 export const getUserProfile = (req,res) =>{
     try {
