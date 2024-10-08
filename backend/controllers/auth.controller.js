@@ -89,4 +89,16 @@ export const signout = async(req,res) =>{
       .json({ success: false, message: "Signout failed", error: error.message });
   }
 }
+export const getMe = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id).select("-password");
+
+    res.status(200).json(user);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({
+      error: error.message,
+    });
+  }
+};
 

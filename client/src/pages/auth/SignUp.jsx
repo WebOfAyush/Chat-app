@@ -1,14 +1,24 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { signup } from "../../api/authAPI";
 
 export default function SignUp() {
+  const queryClient = useQueryClient();
+  const {mutate, isError, isPending, error}= useMutation({
+    mutationFn:signup,
+    onSuccess: () =>{
+      console.log("user created ")
+      queryClient.invalidateQueries({ queryKey: ["authUser"] });
+    },
+  })
+
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     username: "",
     email: "",
     password: "",
-    confirmPassword: "",
   });
 
   const handleChange = (e) => {
@@ -18,8 +28,7 @@ export default function SignUp() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
-    console.log(formData);
+    mutate(formData)
   };
 
   return (
@@ -107,19 +116,6 @@ export default function SignUp() {
                 type="password"
                 placeholder="Password"
                 value={formData.password}
-                onChange={handleChange}
-                required
-                className="w-full px-3 py-2 bg-foreground text-white rounded-xl outline-none"
-              />
-            </div>
-            <div className="space-y-2">
-              
-              <input
-                id="confirmPassword"
-                name="confirmPassword"
-                type="password"
-                placeholder="Confirm Password"
-                value={formData.confirmPassword}
                 onChange={handleChange}
                 required
                 className="w-full px-3 py-2 bg-foreground text-white rounded-xl outline-none"
