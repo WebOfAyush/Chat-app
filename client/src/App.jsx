@@ -5,14 +5,11 @@ import Login from './pages/auth/Login';
 import HomePage from './pages/home/HomePage';
 import {getMe} from "./api/authAPI"
 import { useQuery } from '@tanstack/react-query';
+import { useAuthContext } from './context/authContext';
 
 
 function App() {
-  const {data:authUser } = useQuery({
-    queryKey:["authUser"],
-    queryFn:getMe,
-    retry:false,
-  })
+  const { authUser} = useAuthContext();
   return (
     <BrowserRouter>
       <Routes>

@@ -1,7 +1,19 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-
+import { login } from "../../api/authAPI";
+import { useAuthContext } from "../../context/authContext";
 export default function SignUp() {
+  const { setAuthUser, setIsAuthenticated } = useAuthContext();
+  const {mutate, isPending, isError, error} = useMutation({
+    mutationFn:login,
+    onSuccess:(data)=>{
+      console.log("User Logined")
+      localStorage.setItem("chatx_user_data", JSON.stringify(data.user));
+      setAuthUser(data.user);
+      setIsAuthenticated(true);
+    }
+  })
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -14,13 +26,12 @@ export default function SignUp() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+    mutate(formData)
     console.log(formData);
   };
 
   return (
     <main className="min-h-screen bg-background flex flex-col lg:flex-row font-poppins">
-      
       <div className="w-full lg:w-1/2 flex justify-center items-center p-8">
         <div className="w-full max-w-md space-y-8">
           <div className="text-white">
@@ -34,7 +45,6 @@ export default function SignUp() {
           </div>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
-             
               <input
                 id="username"
                 name="username"
@@ -46,9 +56,8 @@ export default function SignUp() {
                 className="w-full px-3 py-2 bg-foreground text-white rounded-xl outline-none"
               />
             </div>
- 
+
             <div className="space-y-2">
-              
               <input
                 id="password"
                 name="password"
@@ -60,12 +69,12 @@ export default function SignUp() {
                 className="w-full px-3 py-2 bg-foreground text-white rounded-xl outline-none"
               />
             </div>
-            
+
             <button
               type="submit"
               className="mt-10 w-full px-4 py-2 bg-primary text-white rounded-xl hover:bg-primary-dark transition-colors"
             >
-              Login
+              {isPending ? "Loading": "Login"}
             </button>
           </form>
         </div>
@@ -74,7 +83,7 @@ export default function SignUp() {
         <img
           src="/vectors/login-page.png"
           alt="Decorative illustration for login page"
-          width={900} 
+          width={900}
           height={700}
           className="w-full max-w-md h-auto"
         />

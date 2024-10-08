@@ -10,7 +10,6 @@ export const getMe = async () => {
     if (!response.status || response.status !== 200) {
       return null;
     }
-
     return response.data;
   } catch (error) {
     console.error(error.message);
@@ -50,3 +49,22 @@ export const signup = async ({
     throw error.response?.data || new Error("Failed to create account!");
   }
 };
+export const login = async({username, password})=>{
+  try {
+    const res = await axios.post("/api/auth/signin",{
+      username,
+      password
+    },
+    { 
+      withCredentials:true,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+    console.log(res.data)
+    return res.data
+  } catch (error) {
+    console.log(error.response?.data || error.message);
+    throw error.response?.data || new Error("Failed to create account!");
+  }
+}

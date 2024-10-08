@@ -2,14 +2,17 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { signup } from "../../api/authAPI";
+import { useAuthContext } from "../../context/authContext";
 
 export default function SignUp() {
-  const queryClient = useQueryClient();
+  const { setAuthUser, setIsAuthenticated } = useAuthContext();
   const {mutate, isError, isPending, error}= useMutation({
     mutationFn:signup,
-    onSuccess: () =>{
-      console.log("user created ")
-      queryClient.invalidateQueries({ queryKey: ["authUser"] });
+    onSuccess: (data) =>{
+      console.log("user created ", data)
+      localStorage.setItem("chatx_user_data", JSON.stringify(data.user));
+      setAuthUser(data.user);
+      setIsAuthenticated(true);
     },
   })
 
@@ -48,7 +51,7 @@ export default function SignUp() {
             <h1 className="text-4xl font-bold mb-2">Create an account</h1>
             <p className="text-gray-400">
               Already have an account?{" "}
-              <Link href="/login" className="text-primary hover:underline">
+              <Link to="/login" className="text-primary hover:underline">
                 Login
               </Link>
             </p>
@@ -125,7 +128,7 @@ export default function SignUp() {
               type="submit"
               className="w-full px-4 py-2 bg-primary text-white rounded-xl hover:bg-primary-dark transition-colors"
             >
-              Create Account
+              {isPending ? "Loading": "Create Account"}
             </button>
           </form>
         </div>
