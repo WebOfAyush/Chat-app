@@ -77,7 +77,7 @@ export const declineFriendRequest = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-export const viewFriendRequests = async (req,res) =>{
+export const incommingFriendRequests = async (req,res) =>{
   try {
     const userId = req.user._id;
     const user = await User.findById(userId);
@@ -92,6 +92,24 @@ export const viewFriendRequests = async (req,res) =>{
   
   } catch (error) {
     console.error(`Error in viewfriendRequest controller: ${error.message}`);
+    return res.status(500).json({ error: error.message });
+  }
+}
+export const outgoingFriendRequests = async (req,res) =>{
+  try {
+    const userId = req.user._id;
+    const user = await User.findById(userId);
+    if(!user){
+      return res.status(404).json({message: "User not found"})
+    }
+    const friendRequests = await FriendRequest.find({from: user._id});
+    if (friendRequests.length === 0) {
+      return res.status(200).json({ message: "No outgoing friend requests found" });
+    }
+    return res.status(200).json(friendRequests)
+  
+  } catch (error) {
+    console.error(`Error in outgoingfriendRequest controller: ${error.message}`);
     return res.status(500).json({ error: error.message });
   }
 }

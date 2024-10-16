@@ -10,7 +10,8 @@ import {
   acceptFriendRequest,
   declineFriendRequest,
   sendfriendRequest,
-  viewFriendRequests
+  incommingFriendRequests,
+  outgoingFriendRequests
 } from "../controllers/friendRequest.controller.js";
 
 const router = express.Router();
@@ -32,5 +33,6 @@ router.post(
   validate(declinefriendRequestSchema),
   declineFriendRequest
 );
-router.get("/view", protectRoutes, viewFriendRequests)
+router.get("/incomming", protectRoutes, incommingFriendRequests)
+router.get("/outgoing", protectRoutes, outgoingFriendRequests)
 export default router;
