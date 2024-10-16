@@ -78,10 +78,7 @@ export const updateUserProfile = async (req, res) => {
 };
 export const searchUsers = async (req, res) => {
   try {
-    const { query } = req.params;
-    if(query !== String) return res.status(400).json({message: "Query can only be a String"})
-    if(query == "") return res.status(400).json({message: "Query can't be empty"})
-
+    const { query } = req.query;
     const users = await User.find({
       username: { $regex: query, $options: "i" },
     })
