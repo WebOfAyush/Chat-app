@@ -1,11 +1,13 @@
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import { v2 as cloudinary } from "cloudinary";
-import FriendRequest from "../models/friendRequest.model.js";
+
+import {getUserProfileSchema} from "../schema/user/userSchema.js"
+import {z} from "zod"
 
 export const getUserProfile = async (req, res) => {
   try {
-    const { username } = req.params;
+    const { username } = getUserProfileSchema.parse(req.params);
     const user = await User.findOne({ username }).select("-password");
     if (!user) {
       return res.status(404).json({
@@ -14,6 +16,12 @@ export const getUserProfile = async (req, res) => {
     }
     res.status(200).json(user);
   } catch (error) {
+    if (error instanceof z.ZodError) {
+      // Handle Zod validation errors
+      return res.status(400).json({
+        error: error.errors.map(err => err.message).join(', '),
+      });
+    }
     console.log(error.message);
     res.status(500).json({ error: error.message });
   }
@@ -24,7 +32,7 @@ export const updateUserProfile = async (req, res) => {
       req.body;
     let { profileImg } = req.body;
     const userId = req.user._id;
-    const user = User.findById(userId);
+    const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({
         message: "User not found",
@@ -67,8 +75,8 @@ export const updateUserProfile = async (req, res) => {
     user.link = link || user.link;
     user.profileImg = profileImg || user.profileImg;
 
-    user = await user.save();
-    user.password = null;
+    await user.save();
+    user.password = undefined;
 
     return res.status(200).json(user);
   } catch (error) {
@@ -90,17 +98,4 @@ export const searchUsers = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-export const friendRequest = async (req,res) =>{
-  try {
-    const toUserId = req.body;
-    const fromUserId = req.user._id;
-    const friendRequest = new FriendRequest({
-      from : fromUserId,
-      to : toUserId,
-    })
-    await friendRequest.save()
-  } catch (error) {
-    console.log(`error is friendRequest controller ${error.message}`);
-    res.status(500).json({ error: error.message });
-  }
-}
+
