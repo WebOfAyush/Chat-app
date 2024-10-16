@@ -4,12 +4,6 @@ import generateTokenAndSetCookie from "../utils/generateTokenAndSetCookie.js";
 export const signup = async (req, res) => {
   try {
     const { fullName, username, email, password } = req.body;
-    const emailRegex = /^[\w-.]+@([\w-]+.)+[\w-]{2,4}$/;
-    if (!emailRegex.test(email)) {
-      return res.status(400).json({
-        message: "Invalid email format.",
-      });
-    }
     const existingUser = await User.findOne({ username });
     if (existingUser) {
       return res.status(400).json({
@@ -20,11 +14,6 @@ export const signup = async (req, res) => {
     if (existingEmail) {
       return res.status(400).json({
         message: "email already taken.",
-      });
-    }
-    if (password.length < 6) {
-      return res.status(400).json({
-        message: "Password should contain minimum 6 characters",
       });
     }
     const salt = bcrypt.genSaltSync(10);
@@ -38,7 +27,8 @@ export const signup = async (req, res) => {
     if (newUser) {
       generateTokenAndSetCookie(newUser._id, res);
       await newUser.save();
-      return res.status(201).json({ user: newUser });
+      const { password, ...userWithoutPassword } = newUser._doc;
+      return res.status(201).json({ user: userWithoutPassword });
     }
   } catch (error) {
     console.error(`Error in signup controller: ${error}`);
@@ -64,7 +54,8 @@ export const signin = async (req, res) => {
       });
     }
     generateTokenAndSetCookie(user._id, res);
-    return res.status(200).json({ user });
+    const { password: _, ...userWithoutPassword } = user._doc;
+    return res.status(200).json({ userWithoutPassword });
   } catch (error) {
     console.error(`Error in signin controller: ${error}`);
 
