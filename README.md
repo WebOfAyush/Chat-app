@@ -1,5 +1,6 @@
 
 # Chat App
+(it is not completed yet i am working on it
 
 A real-time web application built using the MERN stack (MongoDB, Express, React, Node.js) to provide seamless communication between users. The app supports authentication and will include various features to enhance the chat experience.
 
@@ -34,7 +35,7 @@ A real-time web application built using the MERN stack (MongoDB, Express, React,
    npm install
 
    # For frontend
-   cd ../frontend
+   cd ../client
    npm install
    ```
 
@@ -46,7 +47,7 @@ A real-time web application built using the MERN stack (MongoDB, Express, React,
    npm run dev
 
    # For frontend
-   cd ../frontend
+   cd ../client
    npm start
    ```
 
