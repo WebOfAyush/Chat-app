@@ -42,7 +42,7 @@ export const updateUserProfile = async (req, res) => {
       (!currentPassword && newPassword) ||
       (!newPassword && currentPassword)
     ) {
-      return res.status(200).json({
+      return res.status(400).json({
         message: "Please provide both passwords",
       });
     }

@@ -1,21 +1,5 @@
 import axios from "axios";
 
-export const getMe = async () => {
-  try {
-    console.log(`${import.meta.env.VITE_API_ENDPOINT}api/auth/me`);
-    const response = await axios.get(
-      `${import.meta.env.VITE_API_ENDPOINT}api/auth/me`
-    );
-    console.error(response.data);
-    if (!response.status || response.status !== 200) {
-      return null;
-    }
-    return response.data;
-  } catch (error) {
-    console.error(error.message);
-    throw new Error(error.message || "Something went wrong.");
-  }
-};
 export const signup = async ({
   firstName,
   lastName,
@@ -24,9 +8,7 @@ export const signup = async ({
   password,
 }) => {
   try {
-    const fullName = firstName + " " + lastName;
-    console.log(fullName);
-
+    const fullName = `${firstName} ${lastName}`;
     const response = await axios.post(
       "/api/auth/signup",
       {
@@ -35,36 +17,38 @@ export const signup = async ({
         fullName,
         password,
       },
-      { 
-        withCredentials:true,
+      {
+        withCredentials: true,
         headers: {
           "Content-Type": "application/json",
         },
       }
     );
-    console.log(response.data);
     return response.data;
   } catch (error) {
-    console.log(error.response?.data || error.message);
-    throw error.response?.data || new Error("Failed to create account!");
+    throw new Error(
+      error.response?.data?.message || "Failed to create account."
+    );
   }
 };
-export const login = async({username, password})=>{
+
+export const login = async ({ username, password }) => {
   try {
-    const res = await axios.post("/api/auth/signin",{
-      username,
-      password
-    },
-    { 
-      withCredentials:true,
-      headers: {
-        "Content-Type": "application/json",
+    const response = await axios.post(
+      "/api/auth/signin",
+      {
+        username,
+        password,
       },
-    })
-    console.log(res.data)
-    return res.data
+      {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data;
   } catch (error) {
-    console.log(error.response?.data || error.message);
-    throw error.response?.data || new Error("Failed to create account!");
+    throw new Error(error.response?.data?.message || "Failed to log in.");
   }
-}
+};

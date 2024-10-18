@@ -8,6 +8,7 @@ export default {
         foreground:'#454F64',
         primary: "#6B8AFD",
         secondary: "#909090",
+        tertiary:"#131313",
       },
       fontFamily: {
         poppins: ['Poppins', 'sans-serif'],
