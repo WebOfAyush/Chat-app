@@ -6,6 +6,7 @@ export const updateUserProfile = async ({
   newPassword,
   bio,
   link,
+  profileImg
 }) => {
   try {
     const response = await axios.post(
@@ -17,6 +18,7 @@ export const updateUserProfile = async ({
         newPassword,
         bio,
         link,
+        profileImg
       },
       {
         headers: {
@@ -28,6 +30,29 @@ export const updateUserProfile = async ({
       return error.response?.data?.message;
     }
     return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || "Failed to update user.");
+  }
+};
+export const updateProfileImg = async ({
+  profileImg
+}) => {
+  try {
+    const response = await axios.post(
+      "/api/user/update",
+      {
+        profileImg
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (response.status !== 200) {
+      return error.response?.data?.message;
+    }
+    return await response.data;
   } catch (error) {
     throw new Error(error.response?.data?.message || "Failed to update user.");
   }

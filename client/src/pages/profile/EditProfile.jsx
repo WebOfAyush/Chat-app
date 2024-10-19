@@ -2,10 +2,11 @@ import { useMutation } from '@tanstack/react-query';
 import React, { useState } from 'react';
 import { updateUserProfile } from '../../api/userAPI';
 import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 function EditProfile() {
   const authUser = JSON.parse(localStorage.getItem("chatx_user_data"));
-  
+  const navigate = useNavigate();
   const [fullName, setFullName] = useState(authUser.fullName);
   const [email, setEmail] = useState(authUser.email);
   const [currentPassword, setCurrentPassword] = useState('');
@@ -18,12 +19,18 @@ function EditProfile() {
       mutationFn : (updateProfile)=> updateUserProfile(updateProfile),
       onSuccess:(data)=>{
         toast.success("Profile Updated")
+        const updatedUserData = {
+          ...authUser,
+          ...data,
+        };
+        localStorage.setItem("chatx_user_data", JSON.stringify(updatedUserData));
           console.log(data)
           console.log("Profile Updated")
+          navigate("/profile")
       },
       onError:(err)=>{
         console.log(err)
-        // toast.error(err.message)
+        toast.error(err.message)
       }
 
   })

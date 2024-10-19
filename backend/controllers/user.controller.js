@@ -55,8 +55,8 @@ export const updateUserProfile = async (req, res) => {
           .status(400)
           .json({ message: "Password should be more than 6 characters long" });
 
-      const salt = bcrypt.genSaltSync(10);
-      const hashedPassword = bcrypt.hash(newPassword, salt);
+      const salt =  bcrypt.genSaltSync(10);
+      const hashedPassword = await bcrypt.hash(newPassword, salt);
       user.password = hashedPassword;
     }
     if (profileImg) {
@@ -65,8 +65,9 @@ export const updateUserProfile = async (req, res) => {
           user.profileImg.split("/").pop().split(".")[0]
         );
       }
-      const uploadedResponse = await cloudinary.uploader.upload(profileImg);
-      profileImg = uploadedResponse.secure_url;
+      const base64Data = profileImg.replace(/^data:image\/\w+;base64,/, "");
+      const uploadedResponse = await cloudinary.uploader.upload(`data:image/png;base64,${base64Data}`);
+      user.profileImg = uploadedResponse.secure_url;
     }
 
     user.fullName = fullName || user.fullName;

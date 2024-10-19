@@ -35,7 +35,7 @@ export default function SignUp() {
   };
 
   return (
-    <main className="min-h-screen bg-background flex flex-col lg:flex-row font-poppins">
+    <main className="min-h-screen w-screen bg-background flex flex-col lg:flex-row font-poppins">
       <div className="w-full lg:w-1/2 flex justify-center items-center p-8">
         <img
           src="/vectors/signup-page.png"

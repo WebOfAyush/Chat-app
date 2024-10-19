@@ -8,9 +8,9 @@ export default function SignUp() {
   const {mutate, isPending, isError, error} = useMutation({
     mutationFn:login,
     onSuccess:(data)=>{
-      console.log("User Logined")
-      localStorage.setItem("chatx_user_data", JSON.stringify(data.user));
-      setAuthUser(data.user);
+      console.log(data)
+      localStorage.setItem("chatx_user_data", JSON.stringify(data.userWithoutPassword));
+      setAuthUser(data.userWithoutPassword);
       setIsAuthenticated(true);
     }
   })
@@ -31,7 +31,7 @@ export default function SignUp() {
   };
 
   return (
-    <main className="min-h-screen bg-background flex flex-col lg:flex-row font-poppins">
+    <main className="min-h-screen w-screen bg-background flex flex-col lg:flex-row font-poppins">
       <div className="w-full lg:w-1/2 flex justify-center items-center p-8">
         <div className="w-full max-w-md space-y-8">
           <div className="text-white">
