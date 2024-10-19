@@ -91,7 +91,7 @@ export const searchUsers = async (req, res) => {
     const users = await User.find({
       username: { $regex: query, $options: "i" },
     })
-      .limit(10)
+      .limit(5)
       .select("username bio _id");
     res.json(users);
   } catch (error) {

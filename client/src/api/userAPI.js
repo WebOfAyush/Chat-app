@@ -57,3 +57,14 @@ export const updateProfileImg = async ({
     throw new Error(error.response?.data?.message || "Failed to update user.");
   }
 };
+export const searchUser = async (query) =>{
+    try {
+      const response = await axios.get(`/api/user/search?query=${query}`)
+      if (response.status !== 200) {
+        return error.response?.data?.message;
+      }
+      return await response.data;
+    } catch (error) {
+      throw new Error(error.response?.data?.message || "Failed to search user.");
+    }
+}
