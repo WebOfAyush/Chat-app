@@ -3,13 +3,14 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { signup } from "../../api/authAPI";
 import { useAuthContext } from "../../context/authContext";
+import toast from "react-hot-toast"
 
 export default function SignUp() {
   const { setAuthUser, setIsAuthenticated } = useAuthContext();
   const {mutate, isError, isPending, error}= useMutation({
     mutationFn:signup,
     onSuccess: (data) =>{
-      console.log("user created ", data)
+      toast.success("User Created")
       localStorage.setItem("chatx_user_data", JSON.stringify(data.user));
       setAuthUser(data.user);
       setIsAuthenticated(true);
@@ -57,6 +58,7 @@ export default function SignUp() {
             </p>
           </div>
           <form onSubmit={handleSubmit} className="space-y-6">
+          {isError && <div className="text-red-500">{error.message || "Something went wrong"}</div>}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
 
@@ -91,7 +93,7 @@ export default function SignUp() {
                 id="username"
                 name="username"
                 type="text"
-                placeholder="Usernames"
+                placeholder="Username"
                 value={formData.username}
                 onChange={handleChange}
                 required
@@ -99,8 +101,7 @@ export default function SignUp() {
               />
             </div>
             <div className="space-y-2">
-              
-              <input
+              <input       
                 id="email"
                 name="email"
                 type="email"

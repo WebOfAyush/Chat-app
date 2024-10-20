@@ -4,6 +4,7 @@ import { v2 as cloudinary } from "cloudinary";
 
 import {getUserProfileSchema} from "../schema/user/userSchema.js"
 import {z} from "zod"
+import FriendRequest from "../models/friendRequest.model.js";
 
 export const getUserProfile = async (req, res) => {
   try {
@@ -65,9 +66,8 @@ export const updateUserProfile = async (req, res) => {
           user.profileImg.split("/").pop().split(".")[0]
         );
       }
-      const base64Data = profileImg.replace(/^data:image\/\w+;base64,/, "");
-      const uploadedResponse = await cloudinary.uploader.upload(`data:image/png;base64,${base64Data}`);
-      user.profileImg = uploadedResponse.secure_url;
+      const uploadedResponse = await cloudinary.uploader.upload(profileImg);
+      user.profileImg = await uploadedResponse.secure_url;
     }
 
     user.fullName = fullName || user.fullName;
@@ -85,17 +85,33 @@ export const updateUserProfile = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
 export const searchUsers = async (req, res) => {
   try {
     const { query } = req.query;
+    const currentUserId = req.user._id;
+    const friendRequests = await FriendRequest.find({
+      $or: [
+        { from: currentUserId },
+        { to: currentUserId } 
+      ],
+      status: { $in: ['pending', 'accepted'] }
+    });
+
+    const excludedUserIds = friendRequests.map(req => 
+      req.from.toString() === currentUserId.toString() ? req.to : req.from
+    );
+
     const users = await User.find({
       username: { $regex: query, $options: "i" },
+      _id: { $nin: [...excludedUserIds, currentUserId] },
     })
       .limit(5)
       .select("username bio _id");
+
     res.json(users);
   } catch (error) {
-    console.log(`error is search user ${error.message}`);
+    console.log(`Error in search user: ${error.message}`);
     res.status(500).json({ error: error.message });
   }
 };

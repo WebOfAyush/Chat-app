@@ -104,7 +104,7 @@ function EditProfile() {
             onClick={handleSave}
             className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
           >
-            Save Profile
+            {isPending ? "Saving Profile" : "Save Profile"}
           </button>
         </div>
       </div>

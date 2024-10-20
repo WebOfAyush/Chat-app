@@ -47,6 +47,9 @@ export const updateProfileImg = async ({
         headers: {
           "Content-Type": "application/json",
         },
+        body: JSON.stringify({
+          profileImg
+        }),
       }
     );
     if (response.status !== 200) {
