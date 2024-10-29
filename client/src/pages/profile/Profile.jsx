@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { MdEdit } from "react-icons/md";
 import { updateProfileImg } from "../../api/userAPI";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
 function Profile() {
@@ -11,6 +11,7 @@ function Profile() {
   const { fullName, username, bio, link, profileImg: initialProfileImg } = authUser;
   const [profileImg, setProfileImg] = useState(initialProfileImg || null);
   const profileImgRef = useRef(null);
+  const queryClient = useQueryClient();
 
   const handleImgChange = (e) => {
     const file = e.target.files[0];

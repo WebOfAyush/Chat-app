@@ -5,11 +5,12 @@ import Login from "./pages/auth/Login";
 import HomePage from "./pages/home/HomePage";
 import { Toaster } from "react-hot-toast";
 
-import { useAuthContext } from "./context/authContext";
+import { useAuthContext } from "./context/AuthContext";
 import Sidebar from "./components/Sidebar";
 import Requests from "./pages/request/Requests"
 import Profile from "./pages/profile/Profile";
 import EditProfile from "./pages/profile/EditProfile";
+import ChatLayout from "./pages/chat/ChatLayout";
 
 function App() {
   const { authUser } = useAuthContext();
@@ -28,7 +29,7 @@ function App() {
           />
           <Route
             path="/"
-            element={authUser ? <HomePage /> : <Navigate to="/signup" />}
+            element={authUser ? <ChatLayout /> : <Navigate to="/signup" />}
           />
           <Route
             path="/requests"

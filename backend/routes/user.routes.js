@@ -5,6 +5,7 @@ import {
   getUserProfile,
   updateUserProfile,
   searchUsers,
+  getUserFriends,
 } from "../controllers/user.controller.js";
 import {
   searchUsersSchema,
@@ -22,10 +23,11 @@ router.post(
   updateUserProfile
 );
 router.get(
-  "/search/",
+  "/search",
   protectRoutes,
   validateQuery(searchUsersSchema),
   searchUsers
 );
+router.get("/friends", protectRoutes, getUserFriends)
 
 export default router;

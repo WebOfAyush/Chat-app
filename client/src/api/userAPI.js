@@ -71,3 +71,15 @@ export const searchUser = async (query) =>{
       throw new Error(error.response?.data?.message || "Failed to search user.");
     }
 }
+export const getUserFriends = async (query) =>{
+    try {
+      const response = await axios.get(`/api/user/friends`)
+      if (response.status !== 200) {
+        return error.response?.data?.message;
+      }
+      console.log(response.data)
+      return await response.data;
+    } catch (error) {
+      throw new Error(error.response?.data?.message || "Failed to get user friends.");
+    }
+}

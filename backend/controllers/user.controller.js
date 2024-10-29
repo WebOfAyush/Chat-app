@@ -2,8 +2,8 @@ import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import { v2 as cloudinary } from "cloudinary";
 
-import {getUserProfileSchema} from "../schema/user/userSchema.js"
-import {z} from "zod"
+import { getUserProfileSchema } from "../schema/user/userSchema.js";
+import { z } from "zod";
 import FriendRequest from "../models/friendRequest.model.js";
 
 export const getUserProfile = async (req, res) => {
@@ -20,7 +20,7 @@ export const getUserProfile = async (req, res) => {
     if (error instanceof z.ZodError) {
       // Handle Zod validation errors
       return res.status(400).json({
-        error: error.errors.map(err => err.message).join(', '),
+        error: error.errors.map((err) => err.message).join(", "),
       });
     }
     console.log(error.message);
@@ -56,13 +56,15 @@ export const updateUserProfile = async (req, res) => {
           .status(400)
           .json({ message: "Password should be more than 6 characters long" });
 
-      const salt =  bcrypt.genSaltSync(10);
+      const salt = bcrypt.genSaltSync(10);
       const hashedPassword = await bcrypt.hash(newPassword, salt);
       user.password = hashedPassword;
     }
     if (profileImg) {
       if (user.profileImg) {
-        await cloudinary.uploader.destroy(user.profileImg.split("/").pop().split(".")[0]);
+        await cloudinary.uploader.destroy(
+          user.profileImg.split("/").pop().split(".")[0]
+        );
       }
       const uploadedResponse = await cloudinary.uploader.upload(profileImg);
       profileImg = uploadedResponse.secure_url;
@@ -89,14 +91,11 @@ export const searchUsers = async (req, res) => {
     const { query } = req.query;
     const currentUserId = req.user._id;
     const friendRequests = await FriendRequest.find({
-      $or: [
-        { from: currentUserId },
-        { to: currentUserId } 
-      ],
-      status: { $in: ['pending', 'accepted'] }
+      $or: [{ from: currentUserId }, { to: currentUserId }],
+      status: { $in: ["pending", "accepted"] },
     });
 
-    const excludedUserIds = friendRequests.map(req => 
+    const excludedUserIds = friendRequests.map((req) =>
       req.from.toString() === currentUserId.toString() ? req.to : req.from
     );
 
@@ -107,10 +106,23 @@ export const searchUsers = async (req, res) => {
       .limit(5)
       .select("username bio _id");
 
-    res.json(users);
+    res.status(200).json(users);
   } catch (error) {
     console.log(`Error in search user: ${error.message}`);
     res.status(500).json({ error: error.message });
   }
 };
-
+export const getUserFriends = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    if (!userId) return res.status(404).json({ message: "UserId not found" });
+    const user = await User.findById(userId)
+      .populate("friends")
+      .select("-password");
+    if (!user) return res.status(404).json({ message: "User not found" });
+    res.status(200).json(user.friends);
+  } catch (error) {
+    console.log(`Error in getUserFriends: ${error.message}`);
+    res.status(500).json({ error: error.message });
+  }
+};

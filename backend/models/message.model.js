@@ -7,8 +7,9 @@ const messageSchema = new mongoose.Schema({
   content: {
     type: String,
     required: true,
-    maxlength: [500, "message must be at most 500 characters long"],
+    maxlength: [500 , "message cant be more than 500 words."],
   },
 });
 const Message = mongoose.model("Message", messageSchema);
 export default Message;
+
