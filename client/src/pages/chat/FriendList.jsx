@@ -12,7 +12,7 @@ const chats = [
 ];
 
 
-export default function Sidebar() {
+export default function Sidebar({setSelectedUser}) {
   const {data, isLoading, isError, error} = useQuery({
     queryKey:["friends"],
     queryFn:getUserFriends,
@@ -37,6 +37,7 @@ export default function Sidebar() {
       {data?.map((friend) => (
           <div
             key={friend._id}
+            onClick={()=>setSelectedUser(friend)}
             className="px-4 py-3 hover:bg-[#35373c] cursor-pointer"
           >
             <div className="flex items-center space-x-3">
@@ -51,7 +52,7 @@ export default function Sidebar() {
                 <div className="flex justify-between">
                   <h3 className="text-gray-200 text-sm font-medium truncate">{friend.username}</h3>
                 </div>
-                <p className="text-gray-400 text-sm truncate">{friend.bio || "No bio available"}</p>
+                {/* <p className="text-gray-400 text-sm truncate">{friend.bio}</p> */}
               </div>
             </div>
           </div>

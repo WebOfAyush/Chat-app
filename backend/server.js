@@ -2,12 +2,13 @@ import express from "express";
 import authRoutes from "./routes/auth.routes.js";
 import userRoutes from "./routes/user.routes.js";
 import friendRequestRoutes from "./routes/friendRequest.routes.js";
+import messageRoutes from "./routes/message.routes.js"
 import dotenv from "dotenv";
 import connectMongoDB from "./db/connectMongoDB.js";
 import cookieParser from "cookie-parser";
 import { v2 as cloudinary } from "cloudinary";
 import cors from "cors";
-import {app} from "./socket/index.js"
+import {app, server} from "./socket/index.js"
 dotenv.config();
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -30,8 +31,9 @@ app.use(cors(corsOptions));
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/friend-request", friendRequestRoutes);
+app.use("/api/message", messageRoutes)
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`server is listening on ${PORT}`);
   connectMongoDB();
 });

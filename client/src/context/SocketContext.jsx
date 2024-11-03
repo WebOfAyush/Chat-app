@@ -10,13 +10,17 @@ export function useSocketContext() {
 }
 
 export function SocketContextProvider({ children }) {
-    const {socket, setSocket} = useState(null);
-    const {onlineUser, setOnlineUser} = useState([])
+    const [socket, setSocket] = useState(null);
+    const [onlineUser, setOnlineUser] = useState([])
     const authUser = useAuthContext();
 
     useEffect(()=>{
         if(authUser){
-            const socket = io(process.meta.env.VITE_DEVELOPMENT_ENDPOINT)
+            const socket = io(import.meta.env.VITE_DEVELOPMENT_ENDPOINT,{
+              query:{
+                userId : authUser._id
+              }
+            })
             setSocket(socket)
             return ()=> socket.close()
         }else{

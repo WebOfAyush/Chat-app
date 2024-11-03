@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import FriendList from "./FriendList"
-import Chat from './Chat';
+import MessageArea from './MessageArea';
 
 export default function ChatLayout() {
+  const [selectedUser, setSelectedUser] = useState(null)
   return (
     <div className="h-screen w-screen flex bg-[#1e2124]">
-      <FriendList />
-      <Chat />
+      <FriendList setSelectedUser={setSelectedUser} />
+      <MessageArea selectedUser={selectedUser} />
     </div>
   );
 }

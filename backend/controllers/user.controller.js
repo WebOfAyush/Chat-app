@@ -1,7 +1,7 @@
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import { v2 as cloudinary } from "cloudinary";
-
+import Conversation from "../models/conversation.model.js"
 import { getUserProfileSchema } from "../schema/user/userSchema.js";
 import { z } from "zod";
 import FriendRequest from "../models/friendRequest.model.js";
@@ -115,6 +115,17 @@ export const searchUsers = async (req, res) => {
 export const getUserFriends = async (req, res) => {
   try {
     const userId = req.user._id;
+    // const conversations = await Conversation.find({
+    //     participants: { $in: [userId] }
+    // })
+    // .populate({
+    //     path: 'messages',
+    //     options: { sort: { createdAt: -1 }, limit: 1 } 
+    // })
+    // .populate('participants', 'username profileImg')
+    // .exec();
+
+    // res.status(200).json(conversations);
     if (!userId) return res.status(404).json({ message: "UserId not found" });
     const user = await User.findById(userId)
       .populate("friends")
