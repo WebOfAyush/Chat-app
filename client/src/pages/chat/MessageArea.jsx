@@ -1,38 +1,81 @@
-import React from "react";
-import { useState } from "react";
-
-const messages = [
-  {
-    id: 1,
-    sender: "Berojgaar",
-    content: "Job mili kya bhai ?",
-    time: "Today",
-    type: "received",
-  },
-  {
-    id: 2,
-    sender: "You",
-    content: "try kr rha hu yaar linkedin vgera pr",
-    time: "Today",
-    type: "sent",
-  },
-  {
-    id: 3,
-    sender: "You",
-    content: "Apply kra 2-3 company pr",
-    time: "Today",
-    type: "sent",
-  },
-]; 
-
-
+import React, { useEffect, useRef, useState } from "react";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { getMessages, sendMessage } from "../../api/messageAPI";
+import { useSocketContext } from "../../context/SocketContext";
+import { timeAgo } from "../../lib/timeAgo";
+import { format } from "date-fns";
 
 export default function MessageArea({ selectedUser }) {
-  const [message, setMessage] = useState(null)
-  const handleSendMessage = (e) =>{
-    e.preventDefault()
-    // send message or kya
-  }
+  const messagesRef = useRef(null);
+  const [message, setMessage] = useState("");
+  const receiverId = selectedUser?._id || null;
+  const { socket } = useSocketContext();
+  const handleSendMessage = (e) => {
+    e.preventDefault();
+
+    if (!message.trim() || !receiverId) {
+      return;
+    }
+
+    mutate({ receiverId, message });
+    setMessage("");
+  };
+
+  const { mutate, isPending: sendingMessage } = useMutation({
+    mutationFn: ({ receiverId, message }) =>
+      sendMessage({ receiverId, message }),
+    onSuccess: (newMessage) => {
+      setMessages([...messages, newMessage]);
+    },
+    onError: (error) => {
+      console.error("Failed to send message:", error.message || error);
+      if (error.response) {
+        console.error("Response data:", error.response.data);
+      }
+    },
+  });
+  const { data: initialMessages = [], isLoading: isLoadingMessages } = useQuery(
+    {
+      queryKey: ["messages", receiverId],
+      queryFn: () => getMessages(receiverId),
+      enabled: !!receiverId,
+    }
+  );
+  const [messages, setMessages] = useState(initialMessages);
+  useEffect(() => {
+    if (receiverId) {
+      setMessages(initialMessages);
+    }
+  }, [initialMessages, receiverId]);
+  useEffect(() => {
+    if (messagesRef.current) {
+      messagesRef.current.scrollIntoView();
+    }
+  }, [messages]);
+  useEffect(() => {
+
+    if (socket) {
+      socket.on("newMessage", (newMessage) => {
+        setMessages((prevMessages) => [...prevMessages, newMessage]);
+        console.log(newMessage)
+      });
+    }
+
+    return () => {
+      if (socket) {
+        socket.off("newMessage");
+      }
+    };
+  }, [socket, messages]);
+
+  const groupedMessages = messages.reduce((acc, message) => {
+    const messageDate = format(new Date(message.createdAt), "yyyy-MM-dd");
+    if (!acc[messageDate]) {
+      acc[messageDate] = [];
+    }
+    acc[messageDate].push(message);
+    return acc;
+  }, {});
   return (
     <div className="flex-1 flex flex-col bg-[#313338]">
       {selectedUser ? (
@@ -57,30 +100,40 @@ export default function MessageArea({ selectedUser }) {
 
           {/* Messages */}
           <div className="flex-1 overflow-y-auto p-4 space-y-4">
-            {messages.map((message) => (
-              <div
-                key={message.id}
-                className={`flex ${
-                  message.type === "sent" ? "justify-end" : "justify-start"
-                }`}
-              >
-                <div
-                  className={`max-w-[70%] rounded-lg px-4 py-2 ${
-                    message.type === "sent"
-                      ? "bg-[#4752c4] text-white"
-                      : "bg-[#383a40] text-gray-200"
-                  }`}
-                >
-                  <p>{message.content}</p>
-                  <p className="text-xs mt-1 opacity-60">{message.time}</p>
+            {Object.keys(groupedMessages).map((date) => (
+              <div key={date}>
+                {/* Date Header */}
+                <div className="text-center text-gray-400 text-xs my-2">
+                  {format(new Date(date), "MMMM dd, yyyy")}
                 </div>
+                {groupedMessages[date].map((msg) => (
+                  <div
+                    key={msg._id}
+                    className={`flex ${
+                      msg.receiverId === receiverId
+                        ? "justify-end"
+                        : "justify-start"
+                    }`}
+                  >
+                    <div
+                      className={`max-w-[70%] rounded-lg px-4 py-2 my-1 ${
+                        msg.receiverId === receiverId
+                          ? "bg-[#4752c4] text-white"
+                          : "bg-[#383a40] text-gray-200"
+                      }`}
+                    >
+                      <p>{msg.message}</p>
+                    </div>
+                  </div>
+                ))}
               </div>
             ))}
+            <div ref={messagesRef} />
           </div>
 
           {/* Message Input */}
           <div className="p-4 w-full">
-            <div className="flex items-center space-x-2 ">
+            <div className="flex items-center space-x-2">
               <button className="text-gray-400 hover:text-gray-200 p-2">
                 {/* ImagePlus icon here */}
               </button>
@@ -90,9 +143,14 @@ export default function MessageArea({ selectedUser }) {
                   placeholder="Your message"
                   className="flex-1 bg-[#383a40] w-full text-gray-200 px-4 py-2 rounded-md focus:outline-none"
                   value={message}
-                  onChange={(e)=>setMessage(e.target.value)}
+                  onChange={(e) => setMessage(e.target.value)}
                 />
-                <button type="submit" className="px-4 py-2 bg-primary text-white">Send</button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-primary text-white"
+                >
+                  {sendingMessage ? "Sending" : "Send"}
+                </button>
               </form>
             </div>
           </div>

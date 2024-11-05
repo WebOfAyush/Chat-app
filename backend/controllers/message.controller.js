@@ -1,15 +1,15 @@
 import Conversation from "../models/conversation.model.js";
 import Message from "../models/message.model.js";
-import { getReceiverSocketId } from "../socket/index.js";
+import { getReceiverSocketId, io } from "../socket/index.js";
 export const sendMessage = async (req, res) => {
   try {
     const { receiverId, message } = req.body;
     const senderId = req.user._id;
-    let conversation =await Conversation.findOne({
+    let conversation = await Conversation.findOne({
       participants: { $all: [senderId, receiverId] },
     });
     if (!conversation) {
-      conversation =await Conversation.create({
+      conversation = await Conversation.create({
         participants: [senderId, receiverId],
       });
     }
@@ -24,10 +24,12 @@ export const sendMessage = async (req, res) => {
     await newMessage.save();
     await conversation.save();
     // socket wali chize
-    const receiverSocketId = getReceiverSocketId(receiverId);
-		if (receiverSocketId) {
-			io.to(receiverSocketId).emit("newMessage", newMessage);
-		}
+    const receiverSocketId = await getReceiverSocketId(receiverId);
+    console.log(` here is the user id ${receiverSocketId}`)
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit("newMessage", newMessage);
+      console.log(`Message sent to ${receiverId} with socket ID ${receiverSocketId}`);
+    }
 
     res.status(201).json(newMessage);
   } catch (error) {
@@ -39,14 +41,19 @@ export const getMessages = async (req, res) => {
   try {
     const userToChatId = req.params.id;
     const senderId = req.user._id;
-    const conversation = Conversation.find({
-      participants: [senderId, userToChatId],
-    }).populate("messages");
+
+    const conversation = await Conversation.findOne({
+      participants: { $all: [senderId, userToChatId] },
+    }).populate({
+      path: "messages",
+    });
+
     if (!conversation) return res.status(200).json([]);
+
     const messages = conversation.messages;
     res.status(200).json(messages);
   } catch (error) {
-    console.error(`Error in sendMessage controller: ${error.message}`);
+    console.error(`Error in getMessages controller: ${error.message}`);
     res.status(500).json({ error: error.message });
   }
 };
