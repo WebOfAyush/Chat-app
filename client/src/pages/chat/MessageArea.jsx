@@ -57,7 +57,6 @@ export default function MessageArea({ selectedUser }) {
     if (socket) {
       socket.on("newMessage", (newMessage) => {
         setMessages((prevMessages) => [...prevMessages, newMessage]);
-        console.log(newMessage)
       });
     }
 

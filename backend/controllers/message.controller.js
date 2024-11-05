@@ -25,10 +25,8 @@ export const sendMessage = async (req, res) => {
     await conversation.save();
     // socket wali chize
     const receiverSocketId = await getReceiverSocketId(receiverId);
-    console.log(` here is the user id ${receiverSocketId}`)
     if (receiverSocketId) {
       io.to(receiverSocketId).emit("newMessage", newMessage);
-      console.log(`Message sent to ${receiverId} with socket ID ${receiverSocketId}`);
     }
 
     res.status(201).json(newMessage);

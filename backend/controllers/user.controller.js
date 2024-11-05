@@ -131,9 +131,9 @@ export const getUserFriends = async (req, res) => {
       .populate("friends")
       .select("-password");
     if (!user) return res.status(404).json({ message: "User not found" });
-    res.status(200).json(user.friends);
+    return res.status(200).json(user.friends);
   } catch (error) {
     console.log(`Error in getUserFriends: ${error.message}`);
-    res.status(500).json({ error: error.message });
+    return res.status(500).json({ error: error.message });
   }
 };

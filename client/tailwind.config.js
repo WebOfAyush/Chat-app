@@ -7,6 +7,7 @@ export default {
         background: "#2E333D",
         foreground:'#454F64',
         primary: "#6B8AFD",
+        primaryHover:'#4B70FA',
         secondary: "#909090",
         tertiary:"#131313",
       },

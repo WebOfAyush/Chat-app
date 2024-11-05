@@ -15,7 +15,7 @@ import ChatLayout from "./pages/chat/ChatLayout";
 function App() {
   const { authUser } = useAuthContext();
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen font-poppins">
       <BrowserRouter>
       {authUser && <Sidebar />}
         <Routes>

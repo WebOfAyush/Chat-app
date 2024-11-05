@@ -49,7 +49,7 @@ function Profile() {
 
   return (
     <div className="flex h-screen w-screen">
-      <div className="w-full flex flex-col items-center justify-center bg-gray-900 text-white">
+      <div className="w-full flex flex-col items-center justify-center bg-background  text-white">
         <input
           type="file"
           hidden
@@ -87,14 +87,14 @@ function Profile() {
         <div className="flex gap-2">
           <button
             onClick={() => navigate("/profile/edit")}
-            className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600"
+            className="bg-primary text-white px-6 py-2 rounded hover:bg-primaryHover"
             aria-label="Edit Profile"
           >
             Edit Profile
           </button>
           {profileImg && 
             <button
-              className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600"
+              className="bg-primary text-white px-6 py-2 rounded hover:bg-primaryHover"
               onClick={() => {
                 handleProfileUpdate();
                 setProfileImg(null);

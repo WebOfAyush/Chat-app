@@ -8,7 +8,6 @@ export default function SignUp() {
   const {mutate, isPending, isError, error} = useMutation({
     mutationFn:login,
     onSuccess:(data)=>{
-      console.log(data)
       localStorage.setItem("chatx_user_data", JSON.stringify(data.userWithoutPassword));
       setAuthUser(data.userWithoutPassword);
       setIsAuthenticated(true);
