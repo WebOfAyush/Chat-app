@@ -48,7 +48,7 @@ function Profile() {
   };
 
   return (
-    <div className="flex h-screen w-screen">
+    <div className="flex h-screen w-screen md:ml-14">
       <div className="w-full flex flex-col items-center justify-center bg-background  text-white">
         <input
           type="file"

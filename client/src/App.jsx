@@ -15,7 +15,7 @@ import ChatLayout from "./pages/chat/ChatLayout";
 function App() {
   const { authUser } = useAuthContext();
   return (
-    <div className="flex h-screen font-poppins">
+    <div className="flex h-screen font-poppins bg-tertiary">
       <BrowserRouter>
       {authUser && <Sidebar />}
         <Routes>
@@ -29,6 +29,10 @@ function App() {
           />
           <Route
             path="/"
+            element={authUser ? <ChatLayout /> : <Navigate to="/signup" />}
+          />
+          <Route
+            path="/chat/:chatId"
             element={authUser ? <ChatLayout /> : <Navigate to="/signup" />}
           />
           <Route

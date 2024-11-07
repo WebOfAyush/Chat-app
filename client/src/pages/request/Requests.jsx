@@ -89,7 +89,7 @@ function ChatList() {
     }
   );
   return (
-    <div className="w-full 5 px-6 bg-background text-white">
+    <div className="w-full 5 px-6 py-2  md:ml-14 bg-background text-white">
       <div className="mb-6">
         <div className="flex justify-center items-center mt-4 ">
           <input
@@ -127,7 +127,7 @@ function ChatList() {
 
                 <button
                   onClick={() => sendRequest(user._id)}
-                  className="bg-green-500 text-white p-2 rounded mr-2  opacity-0 group-hover:opacity-100 transition-opacity"
+                  className="bg-primary text-white p-2 rounded mr-2  opacity-0 group-hover:opacity-100 transition-opacity"
                 >
                   {isSendingFriendRequest ? "..." :<BsFillSendPlusFill/> }
                 </button>
@@ -138,7 +138,7 @@ function ChatList() {
           <p>No results found</p>
         ) : null}
       </div>
-      <div className="bg-foreground p-4 rounded-md mb-4">
+      <div className="bg-foreground p-4 rounded-lg mb-4">
         <h3
           className="text-lg font-semibold cursor-pointer flex justify-between items-center"
           onClick={toggleOutgoing}
@@ -200,7 +200,7 @@ function ChatList() {
               <ul className="group">
                 {IncommingRequests.map((request) => (
                   <li key={request._id}>
-                    <div className="flex justify-between items-center p-2 rounded-md mb-4 group-hover:bg-foreground">
+                    <div className="flex justify-between items-center p-2 rounded-lg mb-4 group-hover:bg-foreground">
                       <div className="flex w-12 h-12 gap-4 ">
                         <img
                           className="object-cover rounded-md"

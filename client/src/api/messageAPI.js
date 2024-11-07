@@ -26,6 +26,7 @@ export const getMessages = async(receiverId) => {
       console.error("status code:", response.status);
       return response.data?.message || "Error";
     }
+    console.log(response.data)
     return response.data;
   } catch (error) {
     console.error("Error details:", error.response || error.message);

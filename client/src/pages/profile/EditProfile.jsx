@@ -46,7 +46,7 @@ function EditProfile() {
   };
 
   return (
-    <div className="flex h-screen w-screen items-center justify-center bg-gray-900 text-white">
+    <div className="md:ml-14 flex h-screen w-screen items-center justify-center bg-background text-white">
       <div className="w-full max-w-md p-6 bg-gray-800 rounded-lg shadow-md">
         <h2 className="text-2xl font-bold mb-4 text-center">Edit Profile</h2>
 
@@ -56,7 +56,7 @@ function EditProfile() {
             type="text"
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
-            className="p-2 bg-gray-700 rounded text-white"
+            className="p-2 bg-foreground rounded text-white outline-none"
             placeholder="Full Name"
           />
 
@@ -64,15 +64,15 @@ function EditProfile() {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="p-2 bg-gray-700 rounded text-white"
+            className="p-2 bg-foreground rounded text-white outline-none"
             placeholder="Email"
           />
 
           <input
             type="password"
-            value={currentPassword}
+            value={currentPassword} 
             onChange={(e) => setCurrentPassword(e.target.value)}
-            className="p-2 bg-gray-700 rounded text-white"
+            className="p-2 bg-foreground rounded text-white outline-none"
             placeholder="Current Password"
           />
 
@@ -80,14 +80,14 @@ function EditProfile() {
             type="password"
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
-            className="p-2 bg-gray-700 rounded text-white"
+            className="p-2 bg-foreground rounded text-white outline-none"
             placeholder="New Password"
           />
 
           <textarea
             value={bio}
             onChange={(e) => setBio(e.target.value)}
-            className="p-2 bg-gray-700 rounded text-white"
+            className="p-2 bg-foreground rounded text-white outline-none"
             placeholder="Bio"
           />
 
@@ -95,13 +95,13 @@ function EditProfile() {
             type="url"
             value={link}
             onChange={(e) => setLink(e.target.value)}
-            className="p-2 bg-gray-700 rounded text-white"
+            className="p-2 bg-foreground rounded text-white outline-none"
             placeholder="Link"
           />
 
           <button
             onClick={handleSave}
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            className="bg-primary text-white px-4 py-2 rounded hover:bg-primaryHover  "
           >
             {isPending ? "Saving Profile" : "Save Profile"}
           </button>
