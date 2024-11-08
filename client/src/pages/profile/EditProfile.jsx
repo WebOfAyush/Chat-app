@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { updateUserProfile } from '../../api/userAPI';
 import toast from 'react-hot-toast';
 import {useNavigate} from 'react-router-dom'
+import { FaRegClock } from "react-icons/fa6";
+
 
 function EditProfile() {
   const authUser = JSON.parse(localStorage.getItem("chatx_user_data"));
@@ -47,10 +49,10 @@ function EditProfile() {
 
   return (
     <div className="md:ml-14 flex h-screen w-screen items-center justify-center bg-background text-white">
-      <div className="w-full max-w-md p-6 bg-gray-800 rounded-lg shadow-md">
+      <div className="w-full max-w-md p-6 bg-gray-800 rounded-lg shadow-md m-4">
         <h2 className="text-2xl font-bold mb-4 text-center">Edit Profile</h2>
 
-        <div className="flex flex-col space-y-4">
+        <div className="flex flex-col  space-y-4">
         {isError && <div className="text-red-500">{error.message || "An error occurred"}</div>}
           <input
             type="text"

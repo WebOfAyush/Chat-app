@@ -4,8 +4,9 @@ import debounce from "lodash.debounce";
 import { IoSearchSharp } from "react-icons/io5";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { BsFillSendPlusFill } from "react-icons/bs";
-
-
+import { IoMdCheckmark } from "react-icons/io";
+import { RxCross2 } from "react-icons/rx";
+import { FaRegClock } from "react-icons/fa6";
 import {
   getIncommingRequest,
   getOutgoingRequest,
@@ -153,7 +154,7 @@ function ChatList() {
           </span>
         </h3>
 
-        {ShowOutgoing && // Add this condition to control visibility
+        {ShowOutgoing && 
           (isLoadingOutgoingRequests ? (
             "Loading..."
           ) : outgoingRequests && outgoingRequests.length > 0 ? (
@@ -179,8 +180,8 @@ function ChatList() {
                       </div>
                     </div>
                     <div className="font-light text-sm">
-                      <div className="bg-primary text-white px-6 py-2 rounded mr-2">
-                        {request.status}
+                      <div className="bg-primary text-white p-3 rounded mr-2">
+                        {request.status == "pending" ? <FaRegClock /> : "Rejected"}
                       </div>
                     </div>
                   </div>
@@ -220,16 +221,16 @@ function ChatList() {
                       </div>
                       <div className="font-light text-sm">
                         <button
-                          className="bg-primary  text-white px-6 py-2 rounded mr-2"
+                          className="bg-primary  text-white p-3 rounded mr-2"
                           onClick={() => handleAcceptRequest(request._id)}
                         >
-                          {isAccepting ? "Accepting" : "Accept"}
+                          <IoMdCheckmark></IoMdCheckmark>
                         </button>
                         <button
-                          className="bg-primary text-white px-6 py-2 rounded"
+                          className="bg-primary text-white p-3 rounded"
                           onClick={() => handleDeclineRequest(request._id)}
                         >
-                          {isDeclining ? "Declining" : "Decline"}
+                          <RxCross2 />
                         </button>
                       </div>
                     </div>

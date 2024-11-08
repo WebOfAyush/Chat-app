@@ -6,8 +6,8 @@ import { timeAgo } from "../../lib/timeAgo";
 import { format } from "date-fns";
 import { useParams } from "react-router-dom";
 
-export default function MessageArea() {
-  const messagesRef = useRef(null);
+export default function MessageArea({selectedUser}) {
+  // const messagesRef = useRef(null);
   const [message, setMessage] = useState("");
   const { chatId: receiverId } = useParams();
   const { socket } = useSocketContext();
@@ -51,11 +51,11 @@ export default function MessageArea() {
     }
   }, [conversation.messages, receiverId]);
 
-  useEffect(() => {
-    if (messagesRef.current) {
-      messagesRef.current.scrollIntoView();
-    }
-  }, [messages]);
+  // useEffect(() => {
+  //   if (messagesRef.current) {
+  //     messagesRef.current.scrollIntoView();
+  //   }
+  // }, [messages]);
 
   useEffect(() => {
     if (socket) {
@@ -70,6 +70,12 @@ export default function MessageArea() {
       }
     };
   }, [socket, messages]);
+  useEffect(() => {
+    const container = document.querySelector(".messages-container");
+    if (container) {
+      container.scrollTop = container.scrollHeight;
+    }
+  }, [messages]);
 
   const groupedMessages = (messages || []).reduce((acc, message) => {
     const messageDate = format(new Date(message.createdAt), "yyyy-MM-dd");
@@ -86,7 +92,7 @@ export default function MessageArea() {
   };
 
   return (
-    <div className=` flex-1 mt-2 flex flex-col bg-background ${selectedUser ? "hidden md:block" : "block"} ` >
+      <div className={`flex-1 flex flex-col bg-background ${selectedUser ? "block" : "hidden"} md:block`}>
       {receiverId ? (
         <>
           {/* Chat Header */}
@@ -109,9 +115,9 @@ export default function MessageArea() {
             </div>
             <button className="text-gray-400 hover:text-gray-200"></button>
           </div>
-
+        
           {/* Messages */}
-          <div className="flex-1 no-scrollbar overflow-y-auto p-4 space-y-4">
+          <div className="messages-container flex-1 no-scrollbar overflow-y-auto p-4 space-y-4 h-[calc(100%-115px)]">
             {Object.keys(groupedMessages).map((date) => (
               <div key={date}>
                 {/* Date Header */}
@@ -138,26 +144,23 @@ export default function MessageArea() {
                 ))}
               </div>
             ))}
-            <div ref={messagesRef} />
+            {/* <div ref={messagesRef} /> */}
           </div>
 
           {/* Message Input */}
-          <div className="pr-4 mb-4 w-full">
-            <div className="flex items-center space-x-2">
-              <button className="text-gray-400 hover:text-gray-200 p-2">
-                {/* ImagePlus icon here */}
-              </button>
+          <div>
+            <div className="flex items-center mb-20 md:mb-0 bg-background space-x-2 mx-4">
               <form onSubmit={handleSendMessage} className="flex flex-grow">
                 <input
                   type="text"
                   placeholder="Your message"
-                  className="flex-1 bg-foreground w-full text-gray-200 px-4 py-2 shadow-lg rounded-md rounded-r-none m-0 focus:outline-none"
+                  className="flex-1 bg-foreground w-full text-gray-200 px-4 py-2 shadow-lg rounded-md rounded-r-none focus:outline-none"
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                 />
                 <button
                   type="submit"
-                  className="m-0 px-4 py-2 bg-primary rounded-md rounded-l-none text-white"
+                  className="px-4 py-2 bg-primary rounded-md rounded-l-none text-white"
                 >
                   {sendingMessage ? "Sending" : "Send"}
                 </button>
@@ -166,7 +169,7 @@ export default function MessageArea() {
           </div>
         </>
       ) : (
-        <div className="flex-1 flex items-center justify-center text-center text-gray-400 p-4">
+        <div className="flex-1 h-full flex items-center justify-center text-center text-gray-400 p-4">
           <div>
             <h2 className="text-2xl font-semibold mb-4">No User Selected</h2>
             <p className="text-lg">Please select a user to start chatting</p>

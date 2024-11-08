@@ -5,7 +5,8 @@ import { IoSearchSharp } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 
 
-export default function FriendList({ setSelectedUser }) {
+
+export default function FriendList({ setSelectedUser, selectedUser }) {
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["friends"],
     queryFn: getUserFriends,
@@ -16,7 +17,7 @@ export default function FriendList({ setSelectedUser }) {
     navigate(`/chat/${friend._id}`)
   }
   return (
-    <div className="w-full md:w-80 p-2 px-6 h-screen bg-background md:border-r-8 md:border-r-tertiary ">
+    <div className={`w-full md:w-80  px-8 h-screen bg-background md:border-r-8 md:border-r-tertiary ${selectedUser ? "hidden" : "block"} md:block`}>
       <div className="py-4 ">
         <div className="relative">
           <div className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" >
