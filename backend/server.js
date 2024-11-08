@@ -33,6 +33,14 @@ app.use("/api/user", userRoutes);
 app.use("/api/friend-request", friendRequestRoutes);
 app.use("/api/message", messageRoutes)
 
+if (process.env.NODE_ENV === "production") {
+	app.use(express.static(path.join(__dirname, "/client/dist")));
+
+	app.get("*", (req, res) => {
+		res.sendFile(path.resolve(__dirname, "client", "dist", "index.html"));
+	});
+}
+
 server.listen(PORT, () => {
   console.log(`server is listening on ${PORT}`);
   connectMongoDB();
