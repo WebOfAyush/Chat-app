@@ -8,6 +8,7 @@ import connectMongoDB from "./db/connectMongoDB.js";
 import cookieParser from "cookie-parser";
 import { v2 as cloudinary } from "cloudinary";
 import cors from "cors";
+import path from "path";
 import {app, server} from "./socket/index.js"
 dotenv.config();
 cloudinary.config({
