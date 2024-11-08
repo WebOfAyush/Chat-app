@@ -80,4 +80,3 @@ export const signout = async(req,res) =>{
       .json({ success: false, message: "Signout failed", error: error.message });
   }
 }
-

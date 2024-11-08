@@ -4,11 +4,19 @@ import { getMessages, sendMessage } from "../../api/messageAPI";
 import { useSocketContext } from "../../context/SocketContext";
 import { timeAgo } from "../../lib/timeAgo";
 import { format } from "date-fns";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+import { IoMdArrowRoundBack } from "react-icons/io";
+import { FaAngleLeft } from "react-icons/fa";
+import { MdMoreHoriz } from "react-icons/md";
+import ChatDetails from "../../components/ChatDetails";
 
-export default function MessageArea({selectedUser}) {
+
+export default function MessageArea({selectedUser ,setSelectedUser}) {
   // const messagesRef = useRef(null);
+  const navigate = useNavigate();
+  
   const [message, setMessage] = useState("");
+  const [chatDetails, setChatDetails] = useState(false)
   const { chatId: receiverId } = useParams();
   const { socket } = useSocketContext();
   const handleSendMessage = (e) => {
@@ -43,7 +51,13 @@ export default function MessageArea({selectedUser}) {
       enabled: !!receiverId,
     }
   );
-
+  const handleBackClick = () =>{
+    navigate("/")
+    setSelectedUser(null)
+  }
+  const handleChatDetailsClick = () => {
+    setChatDetails(!chatDetails)
+  }
   const [messages, setMessages] = useState(conversation.messages || []);
   useEffect(() => {
     if (receiverId) {
@@ -92,12 +106,17 @@ export default function MessageArea({selectedUser}) {
   };
 
   return (
-      <div className={`flex-1 flex flex-col bg-background ${selectedUser ? "block" : "hidden"} md:block`}>
+      <div className={`no-scrollbar overflow-hidden flex-1 flex flex-col bg-background ${selectedUser ? "block" : "hidden"} md:block`}>
       {receiverId ? (
         <>
           {/* Chat Header */}
+          {chatDetails && <ChatDetails user={getUserInfo(receiverId) } setChatDetails={setChatDetails}/>}
           <div className="h-14 bg-tertiary flex items-center justify-between px-4">
             <div className="flex items-center space-x-3">
+              <button onClick={handleBackClick} className="block md:hidden">
+
+                <IoMdArrowRoundBack className="w-6 h-6 text-white"/>
+              </button>
               <div className="w-10 h-10 rounded-full flex items-center justify-center">
                 {/* Assuming receiverId is one of the participants */}
                 <img
@@ -113,7 +132,9 @@ export default function MessageArea({selectedUser}) {
                 <p className="text-xs text-gray-400">Online</p>
               </div>
             </div>
-            <button className="text-gray-400 hover:text-gray-200"></button>
+            <button className="text-gray-400 hover:text-white">
+            <MdMoreHoriz className="w-7 h-7" onClick={handleChatDetailsClick}/>
+            </button>
           </div>
         
           {/* Messages */}

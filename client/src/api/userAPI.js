@@ -77,7 +77,6 @@ export const getUserFriends = async (query) =>{
       if (response.status !== 200) {
         return error.response?.data?.message;
       }
-      console.log(response.data)
       return await response.data;
     } catch (error) {
       throw new Error(error.response?.data?.message || "Failed to get user friends.");

@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { updateUserProfile } from '../../api/userAPI';
 import toast from 'react-hot-toast';
 import {useNavigate} from 'react-router-dom'
-import { FaRegClock } from "react-icons/fa6";
 
 
 function EditProfile() {
@@ -30,7 +29,7 @@ function EditProfile() {
           navigate("/profile")
       },
       onError:(err)=>{
-        console.log(err)
+        console.error(err)
         toast.error(err.message)
       }
 
