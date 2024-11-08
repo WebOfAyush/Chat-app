@@ -31,7 +31,6 @@ export const signup = async ({
     );
   }
 };
-
 export const login = async ({ username, password }) => {
   try {
     const response = await axios.post(
@@ -47,8 +46,14 @@ export const login = async ({ username, password }) => {
         },
       }
     );
+
+    if (response.status !== 200) {
+      console.error("status code:", response.status);
+      return response.data?.message || "Error";
+    }
     return response.data;
   } catch (error) {
-    throw new Error(error.response?.data?.message || "Failed to log in.");
+    const errorMessage = error.response?.data?.message || error.message || "Failed to log in.";
+    throw new Error(errorMessage);
   }
 };

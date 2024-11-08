@@ -104,7 +104,7 @@ export const searchUsers = async (req, res) => {
       _id: { $nin: [...excludedUserIds, currentUserId] },
     })
       .limit(5)
-      .select("username bio _id");
+      .select("username profileImg bio _id");
 
     res.status(200).json(users);
   } catch (error) {

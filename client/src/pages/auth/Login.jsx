@@ -1,9 +1,9 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { login } from "../../api/authAPI";
 import { useAuthContext } from "../../context/AuthContext";
-export default function SignUp() {
+export default function Login() {
   const { setAuthUser, setIsAuthenticated } = useAuthContext();
   const {mutate, isPending, isError, error} = useMutation({
     mutationFn:login,
@@ -31,7 +31,7 @@ export default function SignUp() {
   return (
     <main className="min-h-screen w-screen bg-background flex flex-col lg:flex-row font-poppins">
       <div className="w-full lg:w-1/2 flex justify-center items-center p-8">
-        <div className="w-full max-w-md space-y-8">
+        <div className="w-full max-w-md  space-y-8">
           <div className="text-white">
             <h1 className="text-4xl font-bold mb-2">Welcome Back</h1>
             <p className="text-gray-400">
@@ -42,12 +42,17 @@ export default function SignUp() {
             </p>
           </div>
           <form onSubmit={handleSubmit} className="space-y-6">
+          {isError && (
+  <div className="text-red-500">
+    {error?.response?.data?.error || error.message || "Something went wrong"}
+  </div>
+)}
             <div className="space-y-2">
               <input
                 id="username"
                 name="username"
                 type="text"
-                placeholder="Usernames"
+                placeholder="Username"
                 value={formData.username}
                 onChange={handleChange}
                 required
@@ -77,7 +82,7 @@ export default function SignUp() {
           </form>
         </div>
       </div>
-      <div className="w-full lg:w-1/2 flex justify-center items-center p-8">
+      <div className="w-full lg:w-1/2 hidden md:block flex justify-center items-center p-8">
         <img
           src="/vectors/login-page.png"
           alt="Decorative illustration for login page"

@@ -51,6 +51,7 @@ function ChatList() {
       onSuccess: () => {
         queryClient.invalidateQueries("searchUser");
         toast.success("Sent Friend Request");
+        setQuery("")
       },
       onError: (err) => {
         toast.error(err.message || "Something went wrong");
@@ -90,12 +91,12 @@ function ChatList() {
     }
   );
   return (
-    <div className="w-full 5 px-6 py-2  md:ml-14 bg-background text-white">
+    <div className="w-full 5 px-6 py-2  md:ml-14 bg-background text-white overflow-hidden">
       <div className="mb-6">
         <div className="flex justify-center items-center mt-4 ">
           <input
             type="text"
-            placeholder="Search..."
+            placeholder="Search your Friend..."
             className="w-full px-4 py-2 rounded-xl bg-foreground placeholder-gray-400 shadow-sm focus:outline-none"
             onChange={(e) => debouncedSearch(e)}
           />
@@ -103,15 +104,17 @@ function ChatList() {
         {isLoading && <p>Loading...</p>}
         {isError && <p>Error: {error.message}</p>}
         {searchResults && searchResults.length > 0 ? (
-          <ul className="absolute  bg-foreground p-1 rounded-md flex-row gap-2">
+          <div className="w-full flex col justify-center items-center">
+
+          <ul className="absolute z-10 top-16 w-4/5 bg-background p-4 shadow-md rounded-xl flex-row gap-2">
             {searchResults.map((user) => (
               <li
                 key={user._id}
-                className="bg-gray-700 flex justify-between gap-2 my-2 p-2 group"
+                className="bg-foreground flex justify-between rounded-md gap-2 my-2 p-2 group"
               >
                 <div className="flex gap-2">
                   <img
-                    className="w-12 h-12 object-cover"
+                    className="w-12 h-12 object-cover rounded"
                     src={
                       user.profileImg
                         ? user.profileImg
@@ -120,21 +123,22 @@ function ChatList() {
                     alt="Profile Pic"
                   />
 
-                  <div>
-                    <p>{user.username}</p>
-                    {user.bio && <p>{user.bio}</p>}
+                  <div className="ml-2">
+                    <p className="font-medium">{user.username}</p>
+                    {user.bio && <p className="font-light text-gray-400">{user.bio}</p>}
                   </div>
                 </div>
 
                 <button
                   onClick={() => sendRequest(user._id)}
-                  className="bg-primary text-white p-2 rounded mr-2  opacity-0 group-hover:opacity-100 transition-opacity"
+                  className="bg-primary text-white p-3 rounded mr-2  opacity-0 group-hover:opacity-100 transition-opacity"
                 >
-                  {isSendingFriendRequest ? "..." :<BsFillSendPlusFill/> }
+                  {isSendingFriendRequest ? "..." :<BsFillSendPlusFill className="w-5 h-5"/> }
                 </button>
               </li>
             ))}
           </ul>
+              </div>
         ) : query && !isLoading ? (
           <p>No results found</p>
         ) : null}
@@ -201,7 +205,7 @@ function ChatList() {
               <ul className="group">
                 {IncommingRequests.map((request) => (
                   <li key={request._id}>
-                    <div className="flex justify-between items-center p-2 rounded-lg mb-4 group-hover:bg-foreground">
+                    <div className="flex justify-between items-center p-2 rounded-lg mb-4 hover:bg-foreground">
                       <div className="flex w-12 h-12 gap-4 ">
                         <img
                           className="object-cover rounded-md"
