@@ -23,7 +23,7 @@ cloudinary.config({
 
 const PORT = process.env.PORT;
 const corsOptions = {
-  origin: ["https://chat-app-x.up.railway.app"],
+  origin: ["https://chathub.up.railway.app", "http://localhost:5173"],
   credentials: true,
 };
 

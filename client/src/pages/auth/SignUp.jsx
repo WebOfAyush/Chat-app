@@ -11,9 +11,10 @@ const signUpSchema = z.object({
   lastName: z.string().min(1, "Last name is required"),
   username: z.string().min(3, "Username must be at least 3 characters long"),
   email: z.string().email("Invalid email address"),
-  password: z
-    .string()
-    .min(6, "Password must be at least 6 characters long"),
+  password: z.string()
+    .min(8, { message: "Password must be at least 8 characters long" })
+    .refine((val) => /[A-Z]/.test(val), { message: "Password must contain an uppercase letter" })
+    .refine((val) => /[0-9]/.test(val), { message: "Password must contain a number" })
 });
 
 export default function SignUp() {

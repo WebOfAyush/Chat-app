@@ -12,10 +12,11 @@ export function SocketContextProvider({ children }) {
   const [socket, setSocket] = useState(null);
   const [onlineUser, setOnlineUser] = useState([]);
   const {authUser} = useAuthContext();
+  const BACKEND_URL ="https://chathub.up.railway.app"
 
   useEffect(() => {
     if (authUser) {
-      const newSocket = io("https://chat-app-x.up.railway.app", {
+      const newSocket = io(BACKEND_URL, {
         query: {
           userId: authUser._id,
         },
