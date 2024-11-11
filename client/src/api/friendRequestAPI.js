@@ -35,7 +35,7 @@ export const getIncommingRequest = async()=>{
           }
           return await response.data;
     } catch (error) {
-        throw new Error(error.response?.data?.message || "Failed to update user.");
+        throw new Error(error.response?.data?.message || error.message || "Failed to update user.");
       }
 }
 export const acceptFriendRequest = async(requestId)=>{

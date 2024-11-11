@@ -57,3 +57,26 @@ export const login = async ({ username, password }) => {
     throw new Error(errorMessage);
   }
 };
+export const logout = async () => {
+  try {
+    const response = await axios.post(
+      "/api/auth/signout",
+      {},
+      {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (response.status !== 200) {
+      console.error("status code:", response.status);
+      return response.data?.message || "Error";
+    }
+    return response.data;
+  } catch (error) {
+    const errorMessage = error.response?.data?.message || error.message || "Failed to log out.";
+    throw new Error(errorMessage);
+  }
+};
