@@ -40,10 +40,14 @@ function ChatDetails({ user, setChatDetails }) {
         <h2 className="text-xl">{user.username}</h2>
         <h3 className="text-sm text-gray-400">{user.fullName}</h3>
         <h4 className="text-sm w-4/5 text-gray-400">{user.bio}</h4>
-        <div className="flex items-center justify-center gap-2 text-blue-500">
-          <FaExternalLinkAlt className="w-3 h-3" />
-          <Link className="text-xs" to={user.link}>{user.link}</Link>
-        </div>
+        {user.link && (
+          <div className="flex items-center justify-center gap-2 text-blue-500">
+            <FaExternalLinkAlt className="w-3 h-3" />
+            <Link className="text-xs" to={user.link}>
+              {user.link}
+            </Link>
+          </div>
+        )}
       </div>
     </div>
   );
