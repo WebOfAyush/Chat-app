@@ -46,7 +46,7 @@ export default function FriendList({ setSelectedUser, selectedUser }) {
       </button>
 
       {/* Chat List */}
-      <div className=" overflow-y-auto h-[calc(100vh-72px)] ">
+      <div className="no-scrollbar overflow-y-auto h-[calc(100vh-72px)] ">
         {data?.map((friend) => (
           <div
             key={friend._id}
@@ -63,7 +63,7 @@ export default function FriendList({ setSelectedUser, selectedUser }) {
                           ? friend.profileImg
                           : "/avatar-placeholder.png"
                       }
-                      className="object-cover rounded-lg"
+                      className="w-12 object-cover h-12 rounded-lg"
                       alt="profile Img"
                     />
                   </span>

@@ -166,9 +166,9 @@ function ChatList() {
               {outgoingRequests.map((request) => (
                 <li key={request.to._id}>
                   <div className="flex justify-between items-center p-2 rounded-md mb-4">
-                    <div className="flex w-12 h-12 gap-4">
+                    <div className="flex gap-4">
                       <img
-                        className="object-cover rounded-md"
+                        className="w-12 object-cover h-12 rounded-md"
                         src={
                           request.to.profileImg
                             ? request.to.profileImg
@@ -206,9 +206,9 @@ function ChatList() {
                 {IncommingRequests.map((request) => (
                   <li key={request._id}>
                     <div className="flex justify-between items-center p-2 rounded-lg mb-4 hover:bg-foreground">
-                      <div className="flex w-12 h-12 gap-4 ">
+                      <div className="flex  gap-4 ">
                         <img
-                          className="object-cover rounded-md"
+                          className="w-12 object-cover h-12 rounded-md"
                           src={
                             request.from.profileImg
                               ? request.from.profileImg
