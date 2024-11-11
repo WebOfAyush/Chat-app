@@ -33,7 +33,7 @@ function ChatDetails({ user, setChatDetails }) {
       </div>
       <div className="mt-4 flex flex-col justify-center items-center text-center gap-3">
         <img
-          src={user.profileImg ? user.profileImg : "./avatar-placeholder.png"}
+          src={user.profileImg ? user.profileImg : "/avatar-placeholder.png"}
           alt="profile"
           className="w-64 h-64 rounded-lg object-cover"
         />
