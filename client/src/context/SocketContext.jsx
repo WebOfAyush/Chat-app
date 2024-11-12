@@ -10,7 +10,7 @@ export function useSocketContext() {
 
 export function SocketContextProvider({ children }) {
   const [socket, setSocket] = useState(null);
-  const [onlineUser, setOnlineUser] = useState([]);
+  const [onlineUsers, setOnlineUsers] = useState([]);
   const {authUser} = useAuthContext();
   const BACKEND_URL ="https://chathub.up.railway.app"
 
@@ -23,10 +23,16 @@ export function SocketContextProvider({ children }) {
       });
 
       setSocket(newSocket);
+      
+      newSocket.on("getOnlineUsers", (users) => {
+        setOnlineUsers(users);
+        console.log(users)
+      })
 
       return () => newSocket.close();
     } else {
 			if (socket) {
+        
 				socket.close();
 				setSocket(null);
 			}
@@ -34,7 +40,7 @@ export function SocketContextProvider({ children }) {
   }, [authUser]);
 
   return (
-    <SocketContext.Provider value={{ socket, onlineUser }}>
+    <SocketContext.Provider value={{ socket, onlineUsers }}>
       {children}
     </SocketContext.Provider>
   );

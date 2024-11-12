@@ -3,6 +3,7 @@ import React from "react";
 import { getUserFriends } from "../../api/userAPI.js";
 import { IoSearchSharp } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
+import { useSocketContext } from "../../context/SocketContext.jsx";
 
 export default function FriendList({ setSelectedUser, selectedUser }) {
   const { data, isLoading, isError, error } = useQuery({
@@ -17,46 +18,29 @@ export default function FriendList({ setSelectedUser, selectedUser }) {
   const handleNewChatClick = ()=>{
     navigate("/requests")
   }
+  const {onlineUsers} = useSocketContext()
+
   return (
     <div
       className={`w-full md:w-80  px-8 h-screen bg-background md:border-r-8 md:border-r-tertiary ${
         selectedUser ? "hidden" : "block"
       } md:block`}
     >
-      {/* {data === undefined ? (
-        <div className="py-4 ">
-          <div className="relative">
-            <div className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-              <IoSearchSharp />
-            </div>
-            <input
-              type="text"
-              placeholder="search"
-              className="w-full shadow-md bg-foreground text-gray-200 pl-10 pr-4 py-3 rounded-lg text-sm focus:outline-none"
-            />
-          </div>
-        </div>
-      ) : (
-        <button className="bg-primary px-4 py-2 w-full rounded-md text-white mt-4" onClick={handleNewChatClick}>
-            New Chat
-        </button>
-      )} */}
       <button className="bg-primary px-4 py-2 w-full rounded-md text-white my-4" onClick={handleNewChatClick}>
             New Chat
       </button>
 
-      {/* Chat List */}
       <div className="no-scrollbar overflow-y-auto h-[calc(100vh-72px)] ">
         {data?.map((friend) => (
           <div
             key={friend._id}
             onClick={() => handleOnClick(friend)}
-            className="px-2 py-2 rounded-md mb-2 hover:bg-foreground cursor-pointer"
+            className={`px-2 py-2 rounded-md mb-2 ${selectedUser?._id == friend._id && "bg-foreground"} hover:bg-foreground cursor-pointer transition-colors`}
           >
             <div className="flex items-center space-x-3">
               <div className="relative">
                 <div className="w-12 h-12 rounded-full flex items-center justify-center">
-                  <span className="text-gray-300 text-sm  ">
+                  <span className="text-gray-300 w-12 h-12 text-sm  ">
                     <img
                       src={
                         friend.profileImg
@@ -66,6 +50,8 @@ export default function FriendList({ setSelectedUser, selectedUser }) {
                       className="w-12 object-cover h-12 rounded-lg"
                       alt="profile Img"
                     />
+                    {onlineUsers.includes(friend._id) && <div className="rounded-full w-3 h-3 bg-green-500 absolute right-0 bottom-0"></div>}
+                    
                   </span>
                 </div>
               </div>

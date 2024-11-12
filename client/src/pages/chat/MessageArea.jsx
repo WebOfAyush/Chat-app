@@ -14,7 +14,7 @@ import ChatDetails from "../../components/ChatDetails";
 export default function MessageArea({selectedUser ,setSelectedUser}) {
   // const messagesRef = useRef(null);
   const navigate = useNavigate();
-  
+  const {onlineUsers} = useSocketContext()
   const [message, setMessage] = useState("");
   const [chatDetails, setChatDetails] = useState(false)
   const { chatId: receiverId } = useParams();
@@ -121,7 +121,7 @@ export default function MessageArea({selectedUser ,setSelectedUser}) {
                 {/* Assuming receiverId is one of the participants */}
                 <img
                   src={getUserInfo(receiverId)?.profileImg || "/avatar-placeholder.png"}
-                  className="rounded-lg"
+                  className="w-10 h-10 rounded-lg object-cover" 
                   alt="profile Img"
                 />
               </div>
@@ -129,7 +129,8 @@ export default function MessageArea({selectedUser ,setSelectedUser}) {
                 <h3 className="text-gray-200 font-bold">
                   {getUserInfo(receiverId)?.username}
                 </h3>
-                <p className="text-xs text-gray-400">Online</p>
+                <p className="text-xs text-gray-400">{onlineUsers.includes(receiverId) ? "Online" : "Offline"}</p>
+                
               </div>
             </div>
             <button className="text-gray-400 hover:text-white">
