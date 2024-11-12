@@ -32,7 +32,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(cors(corsOptions));
 
-app.use("/api/auth", authRoutes);
+app.use("/api/auth", authRoutes); 
 app.use("/api/user", userRoutes);
 app.use("/api/friend-request", friendRequestRoutes);
 app.use("/api/message", messageRoutes);

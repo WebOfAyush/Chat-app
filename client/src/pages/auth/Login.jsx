@@ -82,7 +82,7 @@ export default function Login() {
           </form>
         </div>
       </div>
-      <div className="w-full lg:w-1/2 hidden md:block flex justify-center items-center p-8">
+      <div className="h-full flex hidden md:flex items-center justify-center w-1/2 p-8">
         <img
           src="/vectors/login-page.png"
           alt="Decorative illustration for login page"

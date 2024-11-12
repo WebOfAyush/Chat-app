@@ -63,15 +63,15 @@ export default function SignUp() {
 
   return (
     <main className="min-h-screen w-screen bg-background flex flex-col lg:flex-row font-poppins">
-      <div className="w-full flex hidden md:block lg:w-1/2  justify-center items-center p-8">
-        <img
-          src="/vectors/signup-page.png"
-          alt="Decorative illustration for sign up page"
-          width={900}
-          height={700}
-          className="w-full max-w-md h-auto"
-        />
-      </div>
+      <div className="h-full flex hidden md:flex items-center justify-center w-1/2 p-8">
+  <img
+    src="/vectors/signup-page.png"
+    alt="Decorative illustration for sign up page"
+    width={900}
+    height={700}
+    className="w-full max-w-md h-auto"
+  />
+</div>
       <div className="w-full lg:w-1/2 flex justify-center items-center p-8">
         <div className="w-full max-w-md space-y-8">
           <div className="text-white">
