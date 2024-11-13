@@ -16,6 +16,7 @@ import {
 } from "../../api/friendRequestAPI";
 import { searchUser } from "../../api/userAPI";
 import toast from "react-hot-toast";
+import Loader from "../../components/Loader";
 
 function ChatList() {
   const [ShowOutgoing, setShowOutgoing] = useState(false);
@@ -199,7 +200,7 @@ function ChatList() {
 
       <div className="rounded-md">
         {isLoadingIncommingRequests
-          ? "Loading..."
+          ? <Loader/>
           : IncommingRequests &&
             IncommingRequests.length > 0 && (
               <ul className="group">

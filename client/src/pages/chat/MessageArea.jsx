@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import {  useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getMessages, sendMessage } from "../../api/messageAPI";
 import { useSocketContext } from "../../context/SocketContext";
 import { timeAgo } from "../../lib/timeAgo";
@@ -9,6 +9,7 @@ import { IoMdArrowRoundBack } from "react-icons/io";
 import { FaAngleLeft } from "react-icons/fa";
 import { MdMoreHoriz } from "react-icons/md";
 import ChatDetails from "../../components/ChatDetails";
+import Loader from "../../components/Loader";
 
 
 export default function MessageArea({selectedUser ,setSelectedUser}) {
@@ -17,6 +18,7 @@ export default function MessageArea({selectedUser ,setSelectedUser}) {
   const {onlineUsers} = useSocketContext()
   const [message, setMessage] = useState("");
   const [chatDetails, setChatDetails] = useState(false)
+  const queryClient = useQueryClient();
   const { chatId: receiverId } = useParams();
   const { socket } = useSocketContext();
   const handleSendMessage = (e) => {
@@ -35,6 +37,7 @@ export default function MessageArea({selectedUser ,setSelectedUser}) {
       sendMessage({ receiverId, message }),
     onSuccess: (newMessage) => {
       setMessages([...messages, newMessage]);
+      queryClient.invalidateQueries("friends")
     },
     onError: (error) => {
       console.error("Failed to send message:", error.message || error);
@@ -75,6 +78,7 @@ export default function MessageArea({selectedUser ,setSelectedUser}) {
     if (socket) {
       socket.on("newMessage", (newMessage) => {
         setMessages((prevMessages) => [...prevMessages, newMessage]);
+        queryClient.invalidateQueries("friends")
       });
     }
 
@@ -106,7 +110,8 @@ export default function MessageArea({selectedUser ,setSelectedUser}) {
   };
 
   return (
-      <div className={`no-scrollbar overflow-hidden flex-1 flex flex-col bg-background ${selectedUser ? "block" : "hidden"} md:block`}>
+    <div className={`no-scrollbar overflow-hidden flex-1 flex flex-col bg-background ${selectedUser ? "block" : "hidden"} md:block`}>
+        {isLoadingMessages && <Loader/> }
       {receiverId ? (
         <>
           {/* Chat Header */}

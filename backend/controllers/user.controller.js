@@ -115,25 +115,37 @@ export const searchUsers = async (req, res) => {
 export const getUserFriends = async (req, res) => {
   try {
     const userId = req.user._id;
-    // const conversations = await Conversation.find({
-    //     participants: { $in: [userId] }
-    // })
-    // .populate({
-    //     path: 'messages',
-    //     options: { sort: { createdAt: -1 }, limit: 1 } 
-    // })
-    // .populate('participants', 'username profileImg')
-    // .exec();
-
-    // res.status(200).json(conversations);
     if (!userId) return res.status(404).json({ message: "UserId not found" });
-    const user = await User.findById(userId)
-      .populate("friends")
-      .select("-password");
-    if (!user) return res.status(404).json({ message: "User not found" });
-    return res.status(200).json(user.friends);
+
+    const conversations = await Conversation.find({
+      participants: { $in: [userId] }
+    })
+    .sort({updatedAt : -1})
+    .populate({
+      path: 'participants',
+      select: 'username profileImg',
+      match: { _id: { $ne: userId } }
+    })
+    .populate({
+      path: 'messages',
+      options: { sort: { createdAt: -1 }, limit: 1 }, 
+    })
+    .exec();
+
+    const friends = conversations.map(conversation => {
+      const friend = conversation.participants.find(p => p._id.toString() !== userId.toString());
+      const lastMessage = conversation.messages[0] || null;
+      return {
+        _id: friend?._id,
+        username: friend?.username,
+        profileImg: friend?.profileImg,
+        lastMessage: lastMessage
+      };
+    });
+
+    return res.status(200).json(friends);
   } catch (error) {
-    console.log(`Error in getUserFriends: ${error.message}`);
+    console.error(`Error in getUserFriends: ${error.message}`);
     return res.status(500).json({ error: error.message });
   }
 };
