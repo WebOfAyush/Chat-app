@@ -32,3 +32,30 @@ export const getMessages = async(receiverId) => {
     throw new Error(error.response?.data?.message || "Failed to get messages.");
   }
 }
+export const sendMessagesWithAttachment = async ({ receiverId, message, file }) => {
+  try {
+    const formData = new FormData();
+    formData.append("message", message);
+    formData.append("receiverId", receiverId);
+    formData.append("file", file); 
+
+    const response = await axios.post(
+      "/api/message/send-with-attachment",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data", 
+        },
+      }
+    );
+
+    if (response.status !== 201) {
+      console.error("Non-200 status code:", response.status);
+      return response.data?.message || "Error";
+    }
+    return response.data;
+  } catch (error) {
+    console.error("Error details:", error.response || error.message);
+    throw new Error(error.response?.data?.message || "Failed to send message.");
+  }
+};
