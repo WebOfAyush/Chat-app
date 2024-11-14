@@ -1,3 +1,4 @@
+import Conversation from "../models/conversation.model.js";
 import FriendRequest from "../models/friendRequest.model.js";
 import User from "../models/user.model.js";
 export const sendfriendRequest = async (req, res) => {
@@ -39,6 +40,7 @@ export const sendfriendRequest = async (req, res) => {
 export const acceptFriendRequest = async (req, res) => {
   try {
     const { requestId } = req.body;
+    const userId = req.user._id
     const friendRequest = await FriendRequest.findById(requestId);
     if (!friendRequest) {
       return res.status(404).json({ message: "Friend Request not found" });
@@ -54,7 +56,10 @@ export const acceptFriendRequest = async (req, res) => {
       $addToSet: { friends: friendRequest.from },
     });
     await FriendRequest.findByIdAndDelete(requestId);
-    res.status(200).json({
+    await Conversation.create({
+      participants: [userId, friendRequest.from._id],
+    });
+    return res.status(200).json({
       message: "Friend Request Accepted",
     });
   } catch (error) {
