@@ -1,23 +1,21 @@
 
 # Chat App
-(it is not completed yet i am working on it
 
-A real-time web application built using the MERN stack (MongoDB, Express, React, Node.js) to provide seamless communication between users. The app supports authentication and will include various features to enhance the chat experience.
+
+A real-time web application built using the MERN stack (MongoDB, Express, React, Node.js) to provide seamless communication between users. The app supports authentication and includes various features to enhance the chat experience.
 
 ## Features (Planned)
 - **User Authentication**: Secure sign-up and login system.
 - **Real-time Messaging**: Send and receive messages instantly.
 - **User Profiles**: Customize and manage your profile.
-- **Group Chats**: Create and participate in group discussions.
-- **Message Notifications**: Receive alerts for new messages.
-- **File Sharing**: Share images, videos, and documents within chats.
-- **Dark/Light Mode**: Toggle between themes for better user experience.
-
+- **Friend Request System**: User can send ,accept and reject friend requests.
+- **Online User**: Shows whether a user is offline or online.
+- **Search Users**: You can search and chat with the user all over the world
 ## Technologies Used
-- **Frontend**: React, ShadCN (UI Components)
+- **Frontend**: React
 - **Backend**: Node.js, Express
 - **Database**: MongoDB (NoSQL Database)
-- **Authentication**: Clerk integration (or JWT if applicable)
+- **Authentication**: JWT
 - **Real-time Communication**: WebSockets or Socket.io
 
 ## Installation
@@ -31,7 +29,6 @@ A real-time web application built using the MERN stack (MongoDB, Express, React,
 2. Install dependencies for both the backend and frontend:
    ```bash
    # For backend
-   cd backend
    npm install
 
    # For frontend
@@ -43,19 +40,19 @@ A real-time web application built using the MERN stack (MongoDB, Express, React,
 3. Start the development server:
    ```bash
    # For backend
-   cd backend
-   npm run dev
+   node backend/server.js
 
    # For frontend
    cd ../client
-   npm start
+   npm run dev
    ```
 
 ## Usage
 
 1. Register an account or log in using existing credentials.
 2. Start a new chat or join an existing one.
-3. Use the sidebar to navigate between personal and group chats.
+3. Search any user all over the world
+4. Send Friend Request or see Outgoing Requests.
 
 
 ## License
