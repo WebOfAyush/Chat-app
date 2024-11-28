@@ -49,7 +49,11 @@ export const getMessages = async (req, res) => {
         participants: [senderId, userToChatId],
       });
     }
-
+    conversation.participants.forEach(participants => {
+      delete participant.friends;
+      delete participant.password;
+      delete participant.email;
+    });
     res.status(200).json(conversation);
   } catch (error) {
     console.error(`Error in getMessages controller: ${error.message}`);
