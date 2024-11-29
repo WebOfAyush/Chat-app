@@ -158,7 +158,7 @@ export default function MessageArea({ selectedUser, setSelectedUser }) {
                       >
                         <p>{msg.message}</p>
                         {msg.image && (
-                          <div className="flex justify-center items-center p-2 cursor-pointer">
+                          <div className="flex justify-center items-center cursor-pointer">
                             <img
                               src={msg.image}
                               className="w-60 h-60 object-cover rounded-lg"
