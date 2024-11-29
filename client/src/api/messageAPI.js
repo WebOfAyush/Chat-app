@@ -1,9 +1,9 @@
 import axios from "axios"
-export const sendMessage = async ({ receiverId, message }) => {
+export const sendMessage = async ({ receiverId, message, image}) => {
   try {
     const response = await axios.post(
       "/api/message/send",
-      { message, receiverId },
+      { message, receiverId, image },
       { headers: { "Content-Type": "application/json" } }
     );
     if (response.status !== 201) {
