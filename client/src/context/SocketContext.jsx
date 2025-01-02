@@ -12,7 +12,7 @@ export function SocketContextProvider({ children }) {
   const [socket, setSocket] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState([]);
   const {authUser} = useAuthContext();
-  const BACKEND_URL ="https://chathub.up.railway.app"
+  const BACKEND_URL ="https://chat-hub-aoza.onrender.com"
 
   useEffect(() => {
     if (authUser) {
